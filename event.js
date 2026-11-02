@@ -20,7 +20,6 @@ const memoStatusEl = document.getElementById("memoStatus");
 const jsonPreviewEl = document.getElementById("jsonPreview");
 
 let currentDateKey = null;
-let currentEvent = null;
 let memoData = {};
 
 function getDateFromQuery() {
@@ -44,6 +43,12 @@ function loadMemoFromLocal() {
   }
 }
 
+function decodeBase64Utf8(base64) {
+  const binaryString = atob(base64.replace(/\n/g, ""));
+  const bytes = Uint8Array.from(binaryString, char => char.charCodeAt(0));
+  return new TextDecoder("utf-8").decode(bytes);
+}
+
 async function fetchEventsFromGitHub() {
   const response = await fetch(EVENTS_API_URL, { cache: "no-store" });
 
@@ -57,7 +62,7 @@ async function fetchEventsFromGitHub() {
     throw new Error("Brak pola content");
   }
 
-  const jsonText = atob(fileData.content.replace(/\n/g, ""));
+  const jsonText = decodeBase64Utf8(fileData.content);
   return JSON.parse(jsonText);
 }
 
@@ -71,13 +76,13 @@ async function loadEventDetails() {
 
   try {
     const events = await fetchEventsFromGitHub();
-    currentEvent = events[currentDateKey] || null;
+    const event = events[currentDateKey] || null;
 
     loadMemoFromLocal();
-    renderEvent(currentEvent);
+    renderEvent(event);
     renderMemoPreview();
 
-    eventStatusEl.textContent = currentEvent
+    eventStatusEl.textContent = event
       ? "Załadowano szczegóły wydarzenia."
       : "Dla tego dnia nie ma wydarzenia w events.json, ale możesz zapisać memo.";
     eventContentEl.classList.remove("hidden");
@@ -107,15 +112,13 @@ function saveMemoLocally() {
     return;
   }
 
-  const memoText = memoInputEl.value.trim();
-
   memoData[currentDateKey] = {
-    memo: memoText
+    memo: memoInputEl.value.trim()
   };
 
   localStorage.setItem(MEMO_STORAGE_KEY, JSON.stringify(memoData, null, 2));
   renderMemoPreview();
-  memoStatusEl.textContent = "Memo zapisane lokalnie. Możesz dodać kolejne dni i potem skopiować cały memo.json.";
+  memoStatusEl.textContent = "Memo zapisane lokalnie.";
 }
 
 function renderMemoPreview() {
