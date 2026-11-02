@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mój Kalendarz GitHub</title>
+  <!-- FullCalendar CSS i JS z darmowego CDN -->
+  <link href="https://jsdelivr.net" rel="stylesheet">
+  <script src="https://jsdelivr.net"></script>
+  
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f7f6; }
+    #calendar { max-width: 1100px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    
+    /* Pełnoekranowe okno (Modal) */
+    .fullscreen-modal {
+      display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: white; z-index: 9999; padding: 30px; box-sizing: border-box; overflow-y: auto;
+    }
+    .modal-content { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; height: 90%; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+    
+    /* Elastyczne pole tekstowe bez limitu linii */
+    textarea {
+      width: 100%; flex-grow: 1; margin-top: 20px; padding: 15px; font-size: 16px;
+      line-height: 1.5; border: 1px solid #ccc; border-radius: 6px; resize: none; font-family: inherit;
+    }
+    .btn { padding: 12px 24px; font-size: 16px; cursor: pointer; border: none; border-radius: 4px; margin-top: 15px; }
+    .btn-save { background: #28a745; color: white; }
+    .btn-close { background: #dc3545; color: white; }
+    .token-section { max-width: 1100px; margin: 0 auto 20px auto; padding: 10px; background: #e2e8f0; border-radius: 6px; }
+  </style>
+</head>
+<body>
+
+  <!-- Sekcja logowania tokenem (niewidoczna, jeśli token jest już zapisany w przeglądarce) -->
+  <div class="token-section" id="tokenSection">
+    <label for="githubToken">Wpisz GitHub Token (wymagany tylko do zapisu zmian): </label>
+    <input type="password" id="githubToken" placeholder="ghp_...">
+    <button onclick="zapiszTokenWPrzegladarce()">Zapisz Token</button>
+  </div>
+
+  <!-- Miejsce na kalendarz -->
+  <div id="calendar"></div>
+
+  <!-- Pełnoekranowe okno edycji opisu -->
+  <div id="eventModal" class="fullscreen-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 id="modalTitle">Tytuł Wydarzenia</h1>
+        <button class="btn btn-close" onclick="zamknijOkno()">Zamknij (X)</button>
+      </div>
+      
+      <!-- Tutaj wpisujemy dowolnie długi tekst -->
+      <textarea id="modalDescription" placeholder="Wpisz tutaj dowolnie długi opis (wiele linijek)..."></textarea>
+      
+      <button class="btn btn-save" onclick="zapiszZmianyOpisu()">Zapisz zmiany na GitHubie</button>
+    </div>
+  </div>
+
+  <script>
+    // --- KONFIGURACJA ---
+    const GITHUB_USER = "TWÓJ_USER_NA_GITHUBIE"; 
+    const GITHUB_REPO = "NAZWA_TWOJEGO_REPOZYTORIUM";
+    const FILE_PATH = "events.json"; // ścieżka do pliku w repo
+    // ---------------------
+
+    let calendar;
+    let aktualneWydarzenieId = null;
+    let calyPlikJsonSha = null; // potrzebne dla GitHub API przy nadpisywaniu
+    let wszystkieWydarzeniaData = [];
+
+    // Ładowanie tokenu z pamięci podręcznej przeglądarki (localStorage)
+    document.getElementById('githubToken').value = localStorage.getItem('git_token') || '';
+
+    function zapiszTokenWPrzegladarce() {
+      const token = document.getElementById('githubToken').value;
+      localStorage.setItem('git_token', token);
+      alert("Token został zapamiętany w Twojej przeglądarce!");
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const calendarEl = document.getElementById('calendar');
+      
+      calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek' // przełączanie miesiąc / tydzień
+        },
+        locale: 'pl', // język polski kalendarza
+        
+        // Pobieranie danych z GitHub API (zawsze aktualna wersja, omijamy cache)
+        events: function(info, successCallback, failureCallback) {
+          const url = `https://github.com{GITHUB_USER}/${GITHUB_REPO}/contents/${FILE_PATH}?t=${new Date().getTime()}`;
+          
+          fetch(url)
+            .then(res => res.json())
+            .then(data => {
+              calyPlikJsonSha = data.sha; // Zapisujemy aktualne SHA pliku
+              // Dekodujemy treść pliku JSON z Base64
+              const decodedText = decodeURIComponent(escape(atob(data.content)));
+              wszystkieWydarzeniaData = JSON.parse(decodedText);
+              successCallback(wszystkieWydarzeniaData);
+            })
+            .catch(err => {
+              console.error("Błąd pobierania danych:", err);
+              failureCallback(err);
+            });
+        },
+        
+        // Akcja po kliknięciu w wydarzenie
+        eventClick: function(info) {
+          otworzPelnoekranoweOkno(info.event);
+        }
+      });
+      
+      calendar.render();
+    });
+
+    function otworzPelnoekranoweOkno(event) {
+      aktualneWydarzenieId = event.id;
+      document.getElementById('modalTitle').innerText = event.title;
+      // Pobieramy długi opis bezpośrednio z przesłanych danych rozszerzonych
+      document.getElementById('modalDescription').value = event.extendedProps.description || '';
+      document.getElementById('eventModal').style.display = 'block';
+    }
+
+    function zamknijOkno() {
+      document.getElementById('eventModal').style.display = 'none';
+    }
+
+    // FUNKCJA ZAPISU DO GITHUBA VIA API
+    async function zapiszZmianyOpisu() {
+      const token = localStorage.getItem('git_token');
+      if (!token) {
+        alert("Błąd: Musisz podać i zapisać GitHub Token na górze strony, aby móc edytować tekst!");
+        return;
+      }
+
+      const nowyOpis = document.getElementById('modalDescription').value;
+
+      // 1. Aktualizujemy opis wybranego wydarzenia w naszej lokalnej tablicy
+      wszystkieWydarzeniaData = wszystkieWydarzeniaData.map(w => {
+        if (w.id === aktualneWydarzenieId) {
+          w.description = nowyOpis;
+        }
+        return w;
+      });
+
+      // 2. Przygotowujemy dane do wysyłki (zamiana na JSON i kodowanie do Base64 z obsługą polskich znaków)
+      const jsonString = JSON.stringify(wszystkieWydarzeniaData, null, 2);
+      const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
+
+      const url = `https://github.com{GITHUB_USER}/${GITHUB_REPO}/contents/${FILE_PATH}`;
+
+      // 3. Wysyłamy spakowany plik metodą PUT na serwer GitHuba
+      try {
+        const response = await fetch(url, {
+          method: "PUT",
+          headers: {
+            "Authorization": `token ${token}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message: `Aktualizacja opisu dla wydarzenia ID: ${aktualneWydarzenieId}`,
+            content: base64Content,
+            sha: calyPlikJsonSha // Przekazujemy SHA, aby potwierdzić wersję pliku
+          })
+        });
+
+        if (response.ok) {
+          alert("Sukces! Opis został zapisany bezpośrednio w pliku JSON na GitHubie.");
+          zamknijOkno();
+          calendar.refetchEvents(); // Odświeżamy kalendarz na stronie, aby pobrał nowe dane
+        } else {
+          const errData = await response.json();
+          alert("Błąd zapisu: " + errData.message);
+        }
+      } catch (error) {
+        alert("Wystąpił błąd połączenia z GitHub API: " + error);
+      }
+    }
+  </script>
+</body>
+</html>
