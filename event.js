@@ -1,4 +1,4 @@
-const EVENTS_URL = "https://raw.githubusercontent.com/TWOJ_LOGIN_GITHUB/ictcalendar/main/events.json";
+const EVENTS_URL = "https://raw.githubusercontent.com/dariuszt007/ictcalendar/main/events.json";
 
 const eventStatusEl = document.getElementById("eventStatus");
 const eventContentEl = document.getElementById("eventContent");
