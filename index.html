@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inqube Calendar</title>
+
+  <link rel="stylesheet" href="style.css" />
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css"
+    rel="stylesheet"
+  />
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="topbar-left">
+        <h1>Inqube Calendar</h1>
+        <p class="subtitle">Kalendarz wydarzeń z repozytorium ictcalendar</p>
+      </div>
+    </header>
+
+    <main class="main-wrap">
+      <section class="calendar-panel">
+        <div class="calendar-toolbar">
+          <div class="toolbar-left">
+            <button id="reloadBtn" class="btn secondary">Odśwież</button>
+            <button id="copyAllMemoBtn" class="btn success">Kopiuj cały memo.json</button>
+          </div>
+
+          <div class="toolbar-right">
+            <button id="monthViewBtn" class="btn view-btn active">Miesiąc</button>
+            <button id="weekViewBtn" class="btn view-btn">Tydzień</button>
+          </div>
+        </div>
+
+        <div id="status" class="status">Ładowanie wydarzeń...</div>
+        <div id="copyStatus" class="status small hidden"></div>
+
+        <div id="calendar"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
