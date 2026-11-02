@@ -41,9 +41,29 @@ async function fetchEvents() {
   return JSON.parse(text);
 }
 
+
+
+
+function getContrastTextColor(hexColor) {
+  if (!hexColor) return "#111827";
+
+  const hex = hexColor.replace("#", "");
+  if (hex.length !== 6) return "#111827";
+
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+
+  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+  return brightness > 160 ? "#111827" : "#ffffff";
+}
+
 function convertEventsToCalendarFormat(eventsObj) {
   return Object.entries(eventsObj).map(([date, event]) => {
+    const eventColor = event.color || "#9ca3af";
+    const textColor = getContrastTextColor(eventColor);
     const allDay = !!event.isAllDay;
+
     let start;
     let end;
 
@@ -63,9 +83,10 @@ function convertEventsToCalendarFormat(eventsObj) {
       start,
       end,
       allDay,
-      backgroundColor: event.color || "#9ca3af",
-      borderColor: event.color || "#9ca3af",
-      textColor: "#1f2937",
+      display: "block",
+      backgroundColor: eventColor,
+      borderColor: eventColor,
+      textColor: textColor,
       extendedProps: {
         date,
         location: event.location || "",
