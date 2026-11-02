@@ -29,13 +29,37 @@ function loadMemoFromLocal() {
 }
 
 function decodeBase64Utf8(base64) {
-  const binaryString = atob(base64.replace(/\n/g, ""));
-  const bytes = Uint8Array.from(binaryString, char => char.charCodeAt(0));
-  return new TextDecoder("utf-8").decode(bytes);
+  const cleanBase64 = base64.replace(/\n/g, "");
+  const binaryString = atob(cleanBase64);
+  const bytes = new Uint8Array(binaryString.length);
+
+  for (let i = 0; i < binaryString.length; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+
+  if (typeof TextDecoder !== "undefined") {
+    return new TextDecoder("utf-8").decode(bytes);
+  }
+
+  let escaped = "";
+  for (let i = 0; i < bytes.length; i++) {
+    escaped += "%" + bytes[i].toString(16).padStart(2, "0");
+  }
+  return decodeURIComponent(escaped);
+}
+
+function decodeBase64Fallback(base64) {
+  const cleanBase64 = base64.replace(/\n/g, "");
+  return decodeURIComponent(escape(atob(cleanBase64)));
 }
 
 async function fetchEventsFromGitHub() {
-  const response = await fetch(EVENTS_API_URL, { cache: "no-store" });
+  const response = await fetch(EVENTS_API_URL, {
+    cache: "no-store",
+    headers: {
+      "Accept": "application/vnd.github+json"
+    }
+  });
 
   if (!response.ok) {
     throw new Error(`HTTP ${response.status}`);
@@ -47,7 +71,15 @@ async function fetchEventsFromGitHub() {
     throw new Error("Brak pola content w odpowiedzi GitHub API");
   }
 
-  const jsonText = decodeBase64Utf8(fileData.content);
+  let jsonText = "";
+
+  try {
+    jsonText = decodeBase64Utf8(fileData.content);
+  } catch (utfError) {
+    console.warn("Pierwsza metoda dekodowania nie powiodła się:", utfError);
+    jsonText = decodeBase64Fallback(fileData.content);
+  }
+
   return JSON.parse(jsonText);
 }
 
@@ -106,7 +138,6 @@ function createCalendar(calendarEvents) {
     height: "auto",
     fixedWeekCount: true,
     navLinks: false,
-    dayMaxEventRows: false,
     headerToolbar: {
       left: "title",
       center: "",
@@ -159,7 +190,11 @@ async function loadCalendar() {
     statusEl.textContent = `Załadowano ${count} wydarzeń.`;
   } catch (error) {
     console.error("Błąd ładowania kalendarza:", error);
-    statusEl.textContent = "Nie udało się pobrać events.json.";
+    statusEl.innerHTML = `
+      Nie udało się pobrać events.json.<br>
+      <small>${String(error.message || error)}</small><br>
+      Sprawdź konsolę przeglądarki klawiszem F12.
+    `;
   }
 }
 
