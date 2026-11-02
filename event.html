@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Szczegóły wydarzenia</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="event-page">
+    <div class="event-layout">
+      <div class="event-header">
+        <a href="index.html" class="btn back-btn">← Powrót do kalendarza</a>
+        <h1>Szczegóły wydarzenia</h1>
+      </div>
+
+      <div id="eventStatus" class="status">Ładowanie szczegółów...</div>
+
+      <div id="eventContent" class="event-content hidden">
+        <section class="detail-card">
+          <div class="color-bar" id="colorBar"></div>
+          <h2 id="eventTitle">-</h2>
+
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="label">Data</span>
+              <span id="eventDate">-</span>
+            </div>
+
+            <div class="detail-item">
+              <span class="label">Lokalizacja</span>
+              <span id="eventLocation">-</span>
+            </div>
+
+            <div class="detail-item">
+              <span class="label">Godzina startu</span>
+              <span id="eventStart">-</span>
+            </div>
+
+            <div class="detail-item">
+              <span class="label">Godzina końca</span>
+              <span id="eventEnd">-</span>
+            </div>
+
+            <div class="detail-item">
+              <span class="label">Cały dzień</span>
+              <span id="eventAllDay">-</span>
+            </div>
+
+            <div class="detail-item">
+              <span class="label">Kategoria</span>
+              <span id="eventCategory">-</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="detail-card">
+          <h3>Memo</h3>
+          <p class="hint">
+            Wpisz notatkę dla tego wydarzenia. Następnie kliknij zapisz, a potem skopiuj cały gotowy plik <code>memo.json</code>.
+          </p>
+
+          <textarea id="memoInput" class="memo-input" placeholder="Tutaj wpisz memo..."></textarea>
+
+          <div class="button-row">
+            <button id="saveMemoBtn" class="btn primary">Zapisz memo</button>
+            <button id="copyJsonBtn" class="btn success">Kopiuj cały memo.json</button>
+          </div>
+
+          <div id="memoStatus" class="status small"></div>
+        </section>
+
+        <section class="detail-card">
+          <h3>Podgląd całego memo.json</h3>
+          <pre id="jsonPreview" class="json-preview">{}</pre>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script src="event.js"></script>
+</body>
+</html>
