@@ -1,4 +1,5 @@
 const EVENTS_URL = "https://raw.githubusercontent.com/dariuszt007/ictcalendar/main/events.json";
+const MEMO_URL = "https://raw.githubusercontent.com/dariuszt007/inqube/main/memo.json";
 const MEMO_STORAGE_KEY = "inqube_memo_data";
 
 const eventStatusEl = document.getElementById("eventStatus");
@@ -27,26 +28,8 @@ function getDateFromQuery() {
   return params.get("date");
 }
 
-function loadMemoFromLocal() {
-  const raw = localStorage.getItem(MEMO_STORAGE_KEY);
-
-  if (!raw) {
-    memoData = {};
-    return;
-  }
-
-  try {
-    memoData = JSON.parse(raw);
-  } catch (error) {
-    console.error("Błąd odczytu memo:", error);
-    memoData = {};
-  }
-}
-
-async function fetchEvents() {
-  const response = await fetch(EVENTS_URL, {
-    cache: "no-store"
-  });
+async function fetchJsonFromUrl(url) {
+  const response = await fetch(url, { cache: "no-store" });
 
   if (!response.ok) {
     throw new Error(`HTTP ${response.status}`);
@@ -54,6 +37,36 @@ async function fetchEvents() {
 
   const text = await response.text();
   return JSON.parse(text);
+}
+
+async function fetchEvents() {
+  return await fetchJsonFromUrl(EVENTS_URL);
+}
+
+async function fetchMemoFromRepo() {
+  try {
+    return await fetchJsonFromUrl(MEMO_URL);
+  } catch (error) {
+    console.warn("Nie udało się pobrać memo.json z repo:", error);
+    return {};
+  }
+}
+
+function loadMemoFromLocalStorage() {
+  const raw = localStorage.getItem(MEMO_STORAGE_KEY);
+
+  if (!raw) return {};
+
+  try {
+    return JSON.parse(raw);
+  } catch (error) {
+    console.error("Błąd odczytu memo z localStorage:", error);
+    return {};
+  }
+}
+
+function saveMemoToLocalStorage(data) {
+  localStorage.setItem(MEMO_STORAGE_KEY, JSON.stringify(data, null, 2));
 }
 
 async function loadEventDetails() {
@@ -65,15 +78,26 @@ async function loadEventDetails() {
   }
 
   try {
-    const events = await fetchEvents();
-    const event = events[currentDateKey] || null;
+    const [events, memoFromRepo] = await Promise.all([
+      fetchEvents(),
+      fetchMemoFromRepo()
+    ]);
 
-    loadMemoFromLocal();
+    const memoFromLocal = loadMemoFromLocalStorage();
+
+    memoData = {
+      ...memoFromRepo,
+      ...memoFromLocal
+    };
+
+    saveMemoToLocalStorage(memoData);
+
+    const event = events[currentDateKey] || null;
     renderEvent(event);
     renderMemoPreview();
 
     eventStatusEl.textContent = event
-      ? "Załadowano szczegóły wydarzenia."
+      ? "Załadowano szczegóły wydarzenia i memo."
       : "Dla tego dnia nie ma wydarzenia w events.json, ale możesz zapisać memo.";
     eventContentEl.classList.remove("hidden");
   } catch (error) {
@@ -109,9 +133,9 @@ function saveMemoLocally() {
     memo: memoInputEl.value.trim()
   };
 
-  localStorage.setItem(MEMO_STORAGE_KEY, JSON.stringify(memoData, null, 2));
+  saveMemoToLocalStorage(memoData);
   renderMemoPreview();
-  memoStatusEl.textContent = "Memo zapisane lokalnie.";
+  memoStatusEl.textContent = "Memo zapisane lokalnie. Możesz dalej edytować lub skopiować cały memo.json.";
 }
 
 function renderMemoPreview() {
