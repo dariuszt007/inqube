@@ -9,10 +9,10 @@ async function loadEvents() {
   eventsListEl.innerHTML = "";
 
   try {
-    const response = await fetch(EVENTS_URL, { cache: "no-store" });
+    const response = await fetch(EVENTS_URL);
 
     if (!response.ok) {
-      throw new Error(`Błąd HTTP: ${response.status}`);
+      throw new Error(`HTTP ${response.status}`);
     }
 
     const data = await response.json();
@@ -21,8 +21,13 @@ async function loadEvents() {
     const count = Object.keys(data).length;
     statusEl.textContent = `Załadowano ${count} wydarzeń.`;
   } catch (error) {
-    console.error(error);
-    statusEl.textContent = "Nie udało się pobrać events.json. Sprawdź adres pliku i dostęp publiczny repozytorium.";
+    console.error("Błąd pobierania events.json:", error);
+    statusEl.innerHTML = `
+      Nie udało się pobrać events.json.<br>
+      Sprawdź konsolę przeglądarki klawiszem F12.<br>
+      Używany adres:<br>
+      <code>${EVENTS_URL}</code>
+    `;
   }
 }
 
