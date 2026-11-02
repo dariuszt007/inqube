@@ -1,4 +1,5 @@
 const EVENTS_URL = "https://raw.githubusercontent.com/dariuszt007/ictcalendar/main/events.json";
+const MEMO_URL = "https://raw.githubusercontent.com/dariuszt007/inqube/main/memo.json";
 const MEMO_STORAGE_KEY = "inqube_memo_data";
 
 const statusEl = document.getElementById("status");
@@ -12,26 +13,8 @@ const calendarEl = document.getElementById("calendar");
 let calendar = null;
 let memoData = {};
 
-function loadMemoFromLocal() {
-  const raw = localStorage.getItem(MEMO_STORAGE_KEY);
-
-  if (!raw) {
-    memoData = {};
-    return;
-  }
-
-  try {
-    memoData = JSON.parse(raw);
-  } catch (error) {
-    console.error("Błąd odczytu memo:", error);
-    memoData = {};
-  }
-}
-
-async function fetchEvents() {
-  const response = await fetch(EVENTS_URL, {
-    cache: "no-store"
-  });
+async function fetchJsonFromUrl(url) {
+  const response = await fetch(url, { cache: "no-store" });
 
   if (!response.ok) {
     throw new Error(`HTTP ${response.status}`);
@@ -41,8 +24,35 @@ async function fetchEvents() {
   return JSON.parse(text);
 }
 
+async function fetchEvents() {
+  return await fetchJsonFromUrl(EVENTS_URL);
+}
 
+async function fetchMemoFromRepo() {
+  try {
+    return await fetchJsonFromUrl(MEMO_URL);
+  } catch (error) {
+    console.warn("Nie udało się pobrać memo.json z repo:", error);
+    return {};
+  }
+}
 
+function loadMemoFromLocalStorage() {
+  const raw = localStorage.getItem(MEMO_STORAGE_KEY);
+
+  if (!raw) return {};
+
+  try {
+    return JSON.parse(raw);
+  } catch (error) {
+    console.error("Błąd odczytu localStorage memo:", error);
+    return {};
+  }
+}
+
+function saveMemoToLocalStorage(data) {
+  localStorage.setItem(MEMO_STORAGE_KEY, JSON.stringify(data, null, 2));
+}
 
 function getContrastTextColor(hexColor) {
   if (!hexColor) return "#111827";
@@ -157,20 +167,32 @@ function createCalendar(calendarEvents) {
 
 async function loadCalendar() {
   statusEl.classList.remove("hidden");
-  statusEl.textContent = "Ładowanie wydarzeń...";
+  statusEl.textContent = "Ładowanie wydarzeń i memo...";
 
   try {
-    loadMemoFromLocal();
-    const eventsObj = await fetchEvents();
+    const [eventsObj, memoFromRepo] = await Promise.all([
+      fetchEvents(),
+      fetchMemoFromRepo()
+    ]);
+
+    const memoFromLocal = loadMemoFromLocalStorage();
+
+    memoData = {
+      ...memoFromRepo,
+      ...memoFromLocal
+    };
+
+    saveMemoToLocalStorage(memoData);
+
     const calendarEvents = convertEventsToCalendarFormat(eventsObj);
     createCalendar(calendarEvents);
 
     const count = Object.keys(eventsObj).length;
-    statusEl.textContent = `Załadowano ${count} wydarzeń.`;
+    statusEl.textContent = `Załadowano ${count} wydarzeń oraz memo z repo/localStorage.`;
   } catch (error) {
     console.error("Błąd ładowania kalendarza:", error);
     statusEl.innerHTML = `
-      Nie udało się pobrać events.json.<br>
+      Nie udało się pobrać danych.<br>
       <small>${String(error.message || error)}</small><br>
       Sprawdź konsolę przeglądarki klawiszem F12.
     `;
@@ -178,7 +200,6 @@ async function loadCalendar() {
 }
 
 async function copyWholeMemoJson() {
-  loadMemoFromLocal();
   const textToCopy = JSON.stringify(memoData, null, 2);
 
   try {
@@ -188,7 +209,7 @@ async function copyWholeMemoJson() {
   } catch (error) {
     console.error("Błąd kopiowania:", error);
     copyStatusEl.classList.remove("hidden");
-    copyStatusEl.textContent = "Nie udało się skopiować. Skopiuj z podglądu w szczegółach wydarzenia.";
+    copyStatusEl.textContent = "Nie udało się skopiować.";
   }
 }
 
