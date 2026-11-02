@@ -230,19 +230,27 @@ body {
   height: 3.2em;
 }
 
+
+
 .fc-event {
   border: none !important;
-  border-radius: 8px !important;
-  padding: 2px 6px !important;
-  font-size: 14px !important;
+  border-radius: 7px !important;
+  padding: 2px 8px !important;
+  font-size: 13px !important;
   line-height: 1.35 !important;
   cursor: pointer;
+  box-shadow: none !important;
 }
 
 .fc-daygrid-event {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin: 2px 4px 0 4px !important;
+}
+
+.fc-h-event .fc-event-main {
+  padding: 0 !important;
 }
 
 .fc-h-event .fc-event-title {
@@ -250,7 +258,12 @@ body {
 }
 
 .fc .fc-daygrid-event-dot {
-  border-color: currentColor !important;
+  display: none !important;
+}
+
+.fc-timegrid-event {
+  border-radius: 8px !important;
+  padding: 2px 6px !important;
 }
 
 .fc .fc-event-time {
