@@ -1,0 +1,9 @@
+[
+  {
+    "id": "1",
+    "title": "Przykładowe Wydarzenie",
+    "start": "2026-11-05T12:00:00",
+    "end": "2026-11-05T14:00:00",
+    "description": "To jest początkowy opis.\nMoże mieć wiele linijek."
+  }
+]
