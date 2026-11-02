@@ -21,7 +21,6 @@ const jsonPreviewEl = document.getElementById("jsonPreview");
 const MEMO_STORAGE_KEY = "inqube_memo_data";
 
 let currentDateKey = null;
-let currentEvent = null;
 let memoData = {};
 
 function getDateFromQuery() {
@@ -38,10 +37,10 @@ async function loadEventDetails() {
   }
 
   try {
-    const response = await fetch(EVENTS_URL, { cache: "no-store" });
+    const response = await fetch(EVENTS_URL);
 
     if (!response.ok) {
-      throw new Error(`Błąd HTTP: ${response.status}`);
+      throw new Error(`HTTP ${response.status}`);
     }
 
     const events = await response.json();
@@ -52,7 +51,6 @@ async function loadEventDetails() {
       return;
     }
 
-    currentEvent = event;
     loadMemoFromLocal();
     renderEvent(event);
     renderMemoPreview();
@@ -60,8 +58,12 @@ async function loadEventDetails() {
     eventStatusEl.textContent = "Załadowano szczegóły wydarzenia.";
     eventContentEl.classList.remove("hidden");
   } catch (error) {
-    console.error(error);
-    eventStatusEl.textContent = "Nie udało się pobrać szczegółów wydarzenia.";
+    console.error("Błąd pobierania szczegółów:", error);
+    eventStatusEl.innerHTML = `
+      Nie udało się pobrać szczegółów wydarzenia.<br>
+      Używany adres:<br>
+      <code>${EVENTS_URL}</code>
+    `;
   }
 }
 
@@ -109,7 +111,7 @@ function saveMemoLocally() {
 
   localStorage.setItem(MEMO_STORAGE_KEY, JSON.stringify(memoData, null, 2));
   renderMemoPreview();
-  memoStatusEl.textContent = "Memo zapisane lokalnie w przeglądarce. Teraz możesz skopiować cały memo.json.";
+  memoStatusEl.textContent = "Memo zapisane lokalnie. Możesz skopiować cały memo.json.";
 }
 
 function renderMemoPreview() {
@@ -121,10 +123,10 @@ async function copyWholeMemoJson() {
 
   try {
     await navigator.clipboard.writeText(textToCopy);
-    memoStatusEl.textContent = "Skopiowano cały memo.json do schowka.";
+    memoStatusEl.textContent = "Skopiowano cały memo.json.";
   } catch (error) {
     console.error(error);
-    memoStatusEl.textContent = "Nie udało się skopiować do schowka. Skopiuj ręcznie z podglądu poniżej.";
+    memoStatusEl.textContent = "Nie udało się skopiować. Skopiuj ręcznie z podglądu.";
   }
 }
 
