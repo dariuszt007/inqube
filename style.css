@@ -306,7 +306,7 @@ body {
 
 .memo-input {
   width: 100%;
-  min-height: 270px;
+  min-height: 500px;
   padding: 14px;
   border: 1px solid #d1d5db;
   border-radius: 12px;
