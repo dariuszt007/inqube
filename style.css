@@ -209,7 +209,7 @@ body {
 }
 
 .fc .fc-daygrid-day-frame {
-  min-height: 145px;
+  min-height: 80px;
 }
 
 .fc .fc-day-today {
