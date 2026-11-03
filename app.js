@@ -120,6 +120,8 @@ function createCalendar(calendarEvents) {
     height: "auto",
     fixedWeekCount: true,
     navLinks: false,
+    displayEventTime: false,
+
     headerToolbar: {
       left: "title",
       center: "",
