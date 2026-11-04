@@ -1,11 +1,230 @@
 {
-  "2026-11-02": {
-    "memo": "1h\n(2-3]  国語　先生はプロジェクターでプレゼンテーションを流しており、私はインターネットの速度を確認し、プロジェクターが正しく動作するようサポートしていました。\n\n2h\n(2-4] 社会　先生はプロジェクターでプレゼンテーションをしていました。途中でインターネットが使えなかったので問題を確認したところ、LANケーブルがソケットにしっかり差し込まれていないことが分かりました。\n\n3h\n【3-1】AET先生\n\n4h\n[1年生] 体育館　生徒たちはプレゼンテーションの練習をし、プロジェクターでプレゼンテーションを再生し、私は干渉なく順調に進んでいるか確認しました。\n\n5h\n[2年生] 体育館　生徒たちはプレゼンテーションの練習をし、プロジェクターでプレゼンテーションを再生し、私は干渉なく順調に進んでいるか確認しました。\n\n6h\n[3年生] 体育館　生徒たちはプレゼンテーションの練習をし、プロジェクターでプレゼンテーションを再生し、私は干渉なく順調に進んでいるか確認しました。\n\n\n1時間"
-  },
-  "2026-10-01": {
-    "memo": ""
-  },
-  "2026-11-04": {
-    "memo": "1h\n【5-1】社会　工場についてプレゼンテーションを作成。どんな工場が一番いいです、大きなか小さい？（PowerPointの操作サポートしました）\n\n2h\n【4-3】英語　先生がプロジェクターでデジタル教科書を表示して、先生が問題を大きな声で言う、児童がメモで答えを書く。後で、ミライシードで同じ答えを書いて先生に送る。（ミライシードのトラブルをサポートしました。）\n\n3h\n【3-2】算数　コンパスで色んな円を書いて、後で写真を撮ってみんなボードに送る。（ミライシードの使い方をサポートしました）\n\n4h\n【5-3】算数　先生がプロジェクターでwizualnie wyjasnial na czym polego wspolny mianownik w ulamkach (プロジェクターのトラブルサポートしました)\n\n1時間\n【延木先生】先生がAIを使ってhtmlのファイルで英語のクイズを作成しました。僕はこのクイズを児童の端末で開くようにサポートしました。\n\n2時間"
-  }
+  "groups": [
+    {
+      "id": "8e67483b-85d1-4c84-8a62-1ef44df3159d",
+      "name": "吹田南小学校",
+      "collapsedSubgroups": false,
+      "subgroups": [
+        {
+          "id": "91aa2a50-88bf-4897-9955-2b93f2140655",
+          "name": "Ogólne",
+          "links": [
+            {
+              "id": "d9e420a4-8dd9-4b3d-8eed-3c661feefcbd",
+              "title": "Lista uczniow",
+              "url": "https://dariuszt007.github.io/s05"
+            },
+            {
+              "id": "fb972e02-a030-4c08-b175-87e2877a3210",
+              "title": "Dzwonki",
+              "url": "https://dariuszt007.github.io/s05suita"
+            }
+          ]
+        },
+        {
+          "id": "bb256653-a271-41c4-b8f9-4b8549762251",
+          "name": "ICT",
+          "links": [
+            {
+              "id": "972425eb-ee82-4d1b-a896-f8dc28412243",
+              "title": "ICTだより",
+              "url": "https://rebrand.ly/s05suita"
+            },
+            {
+              "id": "0bdd5fdd-c7c4-45e4-8833-aac77f845dd5",
+              "title": "パソコンクラブ",
+              "url": "https://padlet.com/dariuszaleksander/padlet-1wc3r0bnbw00yosu"
+            },
+            {
+              "id": "4fa34602-0da7-4b40-802c-3dc680988e33",
+              "title": "クイズ",
+              "url": "https://padlet.com/dariuszaleksander/padlet-ohjplxlxa4d8mjb8"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "62417602-bd20-4129-a954-88e58f91fb3d",
+      "name": "青山台中学校",
+      "collapsedSubgroups": false,
+      "subgroups": [
+        {
+          "id": "c1bd763a-77dc-49b3-b490-2a48ef017d70",
+          "name": "Ogólne",
+          "links": [
+            {
+              "id": "50006cb1-e300-4272-af7c-7b02596a96ea",
+              "title": "Lista uczniow",
+              "url": "https://dariuszt007.github.io/j16"
+            },
+            {
+              "id": "06c7a29d-14cc-470c-b6a2-19bff1f64162",
+              "title": "Dzwonki",
+              "url": "https://dariuszt007.github.io/j16suita"
+            }
+          ]
+        },
+        {
+          "id": "03728b92-9d86-4a87-8dc7-4d414cbe38e1",
+          "name": "ICT",
+          "links": [
+            {
+              "id": "34b343ab-68de-43d4-8c9a-330e85979e12",
+              "title": "ICTだより",
+              "url": "https://rebrand.ly/j16suita"
+            },
+            {
+              "id": "294e3ae1-c435-4db3-b050-f0929951f183",
+              "title": "Life is Tech",
+              "url": "https://lifeistech-lesson.jp/"
+            },
+            {
+              "id": "61b10cc2-8a0e-4dfe-9ee2-077bcb23dfdb",
+              "title": "Life is Tech 管理者",
+              "url": "https://prdlitlesson.b2clogin.com/prdlitlesson.onmicrosoft.com/B2C_1A_USER_EXTENSION_RP_SI_TH/oauth2/v2.0/authorize?client_id=b4999852-6607-4df4-b7fe-7465d92f1403&nonce=92091377&redirect_uri=https%3A%2F%2Fteacher.lifeistech-lesson.jp%2Fauth_oidc&response_type=code&scope=b4999852-6607-4df4-b7fe-7465d92f1403+openid+offline_access&state=eyJfcmFpbHMiOnsiZGF0YSI6eyJwcm92aWRlciI6ImF6dXJlX2FkIn0sImV4cCI6IjIwMjYtMTEtMDJUMDM6Mzg6MjAuODY5WiIsInB1ciI6Im9hdXRoX2xvZ2luX3N0YXRlIn19--a001ac2d51e40aac5ac9a860eca610843dc8f5b0"
+            },
+            {
+              "id": "69b31c51-9be9-436e-8919-4a5bff8421ec",
+              "title": "Ligi is Tech 先生",
+              "url": "https://prdlitlesson.b2clogin.com/prdlitlesson.onmicrosoft.com/B2C_1A_USER_EXTENSION_RP_SI_SD/oauth2/v2.0/authorize?client_id=b4999852-6607-4df4-b7fe-7465d92f1403&nonce=84501453&redirect_uri=https%3A%2F%2Fmember.lifeistech-lesson.jp%2Fauth_oidc&response_type=code&scope=b4999852-6607-4df4-b7fe-7465d92f1403+openid+offline_access&state=eyJfcmFpbHMiOnsiZGF0YSI6eyJwcm92aWRlciI6ImF6dXJlX2FkIn0sImV4cCI6IjIwMjYtMTEtMDJUMDM6Mzk6NTYuMzY0WiIsInB1ciI6Im9hdXRoX2xvZ2luX3N0YXRlIn19--95b643cd980b6194a4cf78bc938de50e2297e24e"
+            },
+            {
+              "id": "44f8cdee-8742-4a79-9338-29ab04e28a84",
+              "title": "クイズ",
+              "url": "https://padlet.com/dariuszaleksander/padlet-9i0d5veui2z68uhx"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "696025ca-06e1-42d0-bdd6-5227f9d9e2e4",
+      "name": "学校",
+      "collapsedSubgroups": false,
+      "subgroups": [
+        {
+          "id": "d1ade72b-620e-4dbd-bb78-da2ec53e84cf",
+          "name": "Bez podgrupy",
+          "links": [
+            {
+              "id": "c71b4309-4955-4251-b2fd-7c6d1d6ad662",
+              "title": "Nauczyciele",
+              "url": "https://dariuszt007.github.io/suita/"
+            },
+            {
+              "id": "17d54411-3e0e-41ee-8f46-b9834a3e0b62",
+              "title": "PDF編集",
+              "url": "https://tools.pdf24.org/ja/"
+            },
+            {
+              "id": "a985ed52-2115-4c56-84dc-9b03e675f69d",
+              "title": "タイマー",
+              "url": "https://dariuszt007.github.io/timer/"
+            },
+            {
+              "id": "77945227-ea43-4418-b64f-55d744aa2d83",
+              "title": "ルーレット",
+              "url": "https://dariuszt007.github.io/numbers/"
+            },
+            {
+              "id": "06559d9b-17e8-42f3-a217-fc5b6c4f9db0",
+              "title": "スロットマシン",
+              "url": "https://dariuszt007.github.io/kulki_pachinko/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "834123d0-2455-4030-ba0a-1ca16d355dfa",
+      "name": "UCHIDA",
+      "collapsedSubgroups": false,
+      "subgroups": [
+        {
+          "id": "a4dbeb17-d3db-4a63-a7d0-d1be44a43c7f",
+          "name": "Bez podgrupy",
+          "links": [
+            {
+              "id": "a6d2d5da-2c2e-4b21-8d93-c7b77ddf1cb4",
+              "title": "Kalendarz ICT",
+              "url": "https://dariuszt007.github.io/ictcalendar/admin.html"
+            },
+            {
+              "id": "8e3beea7-19b9-402a-92ce-71de1f34f31a",
+              "title": "inQube momo",
+              "url": "https://dariuszt007.github.io/inqube/"
+            },
+            {
+              "id": "ae4f4235-06bd-4f3d-814f-7fdc9a201fae",
+              "title": "JobCAN",
+              "url": "https://ssl.jobcan.jp/login/mb-employee-global?redirect_to=%2Fm%2Findex"
+            },
+            {
+              "id": "0c292ee9-69a2-48b2-9497-1a93dd0c0b0d",
+              "title": "inQube",
+              "url": "https://uchida-inqube.cybozu.com/login?redirect=https%3A%2F%2Fuchida%2Dinqube%2Ecybozu%2Ecom%2Fo%2Fag%2Ecgi%3Fpage%3DDBView%26did%3D3740"
+            },
+            {
+              "id": "61d5651d-5a4a-4a90-8c52-a6cd057f8118",
+              "title": "Zmiana Planu",
+              "url": "https://forms.cloud.microsoft/pages/responsepage.aspx?id=esRdBKHVT0GgB3zbHj8957w1wnwOVbdGjOVbop9oMXRUNlFPMkExVVZVUEFBUEVRTUQ0NElJMk9JNS4u"
+            },
+            {
+              "id": "01ea0152-5fd5-4d11-99f3-8a2b05843aa0",
+              "title": "SmartHR",
+              "url": "https://500445440a600d0794538046.smarthr.jp/login"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2ba6c817-0118-4818-b01a-a692bc0d7823",
+      "name": "ePUB",
+      "collapsedSubgroups": false,
+      "subgroups": [
+        {
+          "id": "b2706717-9778-4f01-9fd2-216bf24047d4",
+          "name": "Bez podgrupy",
+          "links": [
+            {
+              "id": "dc6d9f2a-fa87-4e88-8c2a-73dc2a11b892",
+              "title": "Reader",
+              "url": "https://dariuszt007.github.io/book/index.html"
+            },
+            {
+              "id": "db5de3a2-2d01-4b41-832d-34fbff398f0b",
+              "title": "Panel administratora",
+              "url": "https://dariuszt007.github.io/book/admin.html"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "outsideLinks": [
+    {
+      "id": "7eb02f24-8636-4cf3-a447-a341904c432f",
+      "title": "Notion ICT",
+      "url": "https://rebrand.ly/ict3"
+    },
+    {
+      "id": "c639cbca-d681-415b-9322-1ecf6f6920f8",
+      "title": "Zoho Mail",
+      "url": "https://accounts.zoho.jp/signin?servicename=VirtualOffice&signupurl=https://www.zoho.com/mail/signup.html&serviceurl=https://mail.zoho.jp"
+    },
+    {
+      "id": "fdf1e7f4-b1b7-4b4a-af8b-f65b35a199c0",
+      "title": "FotoDruk Pro",
+      "url": "https://dariuszt007.github.io/photo/"
+    },
+    {
+      "id": "d9234ec2-4296-4ea0-a21d-e5452f4ff17d",
+      "title": "Usuń tło zdjecia",
+      "url": "https://pixlr.com/pl/remove-background/"
+    }
+  ],
+  "currentGroupId": "__outside__",
+  "currentSubgroupId": null
 }
