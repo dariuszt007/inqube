@@ -166,8 +166,9 @@ async function loadCalendar() {
     const memoFromLocal = loadMemoFromLocalStorage();
 
     memoData = {
-      ...memoFromRepo,
-      ...memoFromLocal
+      
+      ...memoFromLocal,
+      ...memoFromRepo
     };
 
     saveMemoToLocalStorage(memoData);
