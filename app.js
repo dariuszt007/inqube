@@ -153,38 +153,32 @@ function createCalendar(calendarEvents) {
   calendar.render();
 }
 
-async function loadCalendar() {
+async function loadCalendar(refreshMemo = false) {
   statusEl.classList.remove("hidden");
-  statusEl.textContent = "Ładowanie wydarzeń i memo...";
+  statusEl.textContent = "Ładowanie wydarzeń...";
 
   try {
-    const [eventsObj, memoFromRepo] = await Promise.all([
-      fetchEvents(),
-      fetchMemoFromRepo()
-    ]);
+    const eventsObj = await fetchEvents();
 
-    const memoFromLocal = loadMemoFromLocalStorage();
+    if (refreshMemo) {
+      // Kliknięto „Odśwież” — pobierz memo z GitHuba
+      const memoFromRepo = await fetchJsonFromUrl(MEMO_URL);
+      memoData = memoFromRepo;
+      saveMemoToLocalStorage(memoData);
+    } else {
+      // Zwykłe wejście na stronę — wczytaj memo lokalne
+      memoData = loadMemoFromLocalStorage();
+    }
 
-    memoData = {
-      
-      ...memoFromLocal,
-      ...memoFromRepo
-    };
+    createCalendar(convertEventsToCalendarFormat(eventsObj));
 
-    saveMemoToLocalStorage(memoData);
-
-    const calendarEvents = convertEventsToCalendarFormat(eventsObj);
-    createCalendar(calendarEvents);
-
-    const count = Object.keys(eventsObj).length;
-    statusEl.textContent = `Załadowano ${count} wydarzeń oraz memo z repo/localStorage.`;
+    statusEl.textContent = refreshMemo
+      ? `Załadowano ${Object.keys(eventsObj).length} wydarzeń i memo z GitHuba.`
+      : `Załadowano ${Object.keys(eventsObj).length} wydarzeń. Memo wczytano z localStorage.`;
   } catch (error) {
     console.error("Błąd ładowania kalendarza:", error);
-    statusEl.innerHTML = `
-      Nie udało się pobrać danych.<br>
-      <small>${String(error.message || error)}</small><br>
-      Sprawdź konsolę przeglądarki klawiszem F12.
-    `;
+    statusEl.textContent =
+      `Nie udało się załadować danych: ${String(error.message || error)}`;
   }
 }
 
@@ -202,7 +196,7 @@ async function copyWholeMemoJson() {
   }
 }
 
-reloadBtn.addEventListener("click", loadCalendar);
+reloadBtn.addEventListener("click", () => loadCalendar(true));
 copyAllMemoBtn.addEventListener("click", copyWholeMemoJson);
 
 loadCalendar();
