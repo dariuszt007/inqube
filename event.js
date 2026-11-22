@@ -78,27 +78,18 @@ async function loadEventDetails() {
   }
 
   try {
-    const [events, memoFromRepo] = await Promise.all([
-      fetchEvents(),
-      fetchMemoFromRepo()
-    ]);
-
-    const memoFromLocal = loadMemoFromLocalStorage();
-
-    memoData = {
-      ...memoFromRepo,
-      ...memoFromLocal
-    };
-
-    saveMemoToLocalStorage(memoData);
+    // Wczytaj wydarzenia, a memo wyłącznie z localStorage
+    const events = await fetchEvents();
+    memoData = loadMemoFromLocalStorage();
 
     const event = events[currentDateKey] || null;
     renderEvent(event);
     renderMemoPreview();
 
     eventStatusEl.textContent = event
-      ? "Załadowano szczegóły wydarzenia i memo."
+      ? "Załadowano szczegóły wydarzenia i memo z localStorage."
       : "Dla tego dnia nie ma wydarzenia w events.json, ale możesz zapisać memo.";
+
     eventContentEl.classList.remove("hidden");
   } catch (error) {
     console.error("Błąd pobierania szczegółów:", error);
@@ -156,5 +147,7 @@ async function copyWholeMemoJson() {
 
 saveMemoBtn.addEventListener("click", saveMemoLocally);
 copyJsonBtn.addEventListener("click", copyWholeMemoJson);
+
+
 
 loadEventDetails();
