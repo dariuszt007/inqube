@@ -148,4 +148,15 @@ async function copyWholeMemoJson() {
 saveMemoBtn.addEventListener("click", saveMemoLocally);
 copyJsonBtn.addEventListener("click", copyWholeMemoJson);
 
+// Automatycznie zapisuj memo w localStorage podczas pisania
+memoInputEl.addEventListener("input", () => {
+  if (!currentDateKey) return;
+
+  memoData[currentDateKey] = {
+    memo: memoInputEl.value.trim()
+  };
+
+  saveMemoToLocalStorage(memoData);
+});
+
 loadEventDetails();
