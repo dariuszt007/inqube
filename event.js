@@ -148,6 +148,4 @@ async function copyWholeMemoJson() {
 saveMemoBtn.addEventListener("click", saveMemoLocally);
 copyJsonBtn.addEventListener("click", copyWholeMemoJson);
 
-window.addEventListener("pagehide", saveMemoLocally);
-
 loadEventDetails();
